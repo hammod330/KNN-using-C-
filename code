@@ -1,0 +1,184 @@
+using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace KNN
+{
+    class Program
+    {
+        
+        static void Main(string[] args)
+        {
+
+
+            string filepath = @"DATA.txt";
+
+            string[] rowDATA = File.ReadAllLines(filepath);
+
+            List<string> pPregnancies = new List<string>();
+            List<string> pGlucose = new List<string>();
+            List<string> pBloodPressure = new List<string>();
+            List<string> pSkinThickness = new List<string>();
+            List<string> pInsulin = new List<string>();
+            List<string> pBMI = new List<string>();
+            List<string> pDiabetesPedigreeFunction = new List<string>();
+            List<string> pAge = new List<string>();
+            List<string> pOutcome = new List<string>();
+            string[] temp = new string[6912];
+
+            for (int i = 0; i < 768; i++)
+            {
+                temp = rowDATA[i].Split(',');
+                pPregnancies.Add(temp[0]);
+                //Console.WriteLine(pPregnancies[i]);
+                pGlucose.Add(temp[1]);
+                //Console.WriteLine(pGlucose[i]);
+                pBloodPressure.Add(temp[2]);
+                //Console.WriteLine(pBloodPressure[i]);
+                pSkinThickness.Add(temp[3]);
+                //Console.WriteLine(pSkinThickness[i]);
+                pInsulin.Add(temp[4]);
+                //Console.WriteLine(pInsulin[i]);
+                pBMI.Add(temp[5]);
+                //Console.WriteLine(pBMI[i]);
+                pDiabetesPedigreeFunction.Add(temp[6]);
+                //Console.WriteLine(pDiabetesPedigreeFunction[i]);
+                pAge.Add(temp[7]);
+                //Console.WriteLine(pAge[i]);
+                pOutcome.Add(temp[8]);
+                //Console.WriteLine(pOutcome[i]);
+
+
+            }
+            List<double> Pregnancies = pPregnancies.Select(x => double.Parse(x)).ToList();
+            // Console.WriteLine(Pregnancies[0]);
+            List<double> Glucose = pGlucose.Select(x => double.Parse(x)).ToList();
+            //Console.WriteLine(Glucose[0]);
+            List<double> BloodPressure = pBloodPressure.Select(x => double.Parse(x)).ToList();
+            //  Console.WriteLine(BloodPressure[0]);
+            List<double> SkinThickness = pSkinThickness.Select(x => double.Parse(x)).ToList();
+            // Console.WriteLine(SkinThickness[0]);
+            List<double> Insulin = pInsulin.Select(x => double.Parse(x)).ToList();
+            // Console.WriteLine(Insulin[0]);
+            List<double> BMI = pBMI.Select(x => double.Parse(x)).ToList();
+            // Console.WriteLine(BMI[0]);
+            List<double> DiabetesPedigreeFunction = pDiabetesPedigreeFunction.Select(x => double.Parse(x)).ToList();
+            // Console.WriteLine(DiabetesPedigreeFunction[0]);
+            List<double> Age = pAge.Select(x => double.Parse(x)).ToList();
+            //Console.WriteLine(Age[0]);
+            List<double> Outcome = pOutcome.Select(x => double.Parse(x)).ToList();
+            //Console.WriteLine(Outcome[0]);
+            List<double> value = new List<double>();
+
+            //Console.WriteLine("enter the Pregnancies ");
+            //double PregnanciesD  = double.Parse(Console.ReadLine());
+            double PregnanciesD = 2;
+            //Console.WriteLine("enter the glucose level ");
+            //double glucoseD = double.Parse(Console.ReadLine());
+            double glucoseD = 123;
+            //Console.WriteLine("enter BloodPressure ");
+            //double BloodPressureD = double.Parse(Console.ReadLine());
+            double BloodPressureD = 76;
+            //Console.WriteLine("enter SkinThickness ");
+            //double SkinThicknessD = double.Parse(Console.ReadLine());
+            double SkinThicknessD = 43;
+            //Console.WriteLine("enter insulin level ");
+            //double insulinD = double.Parse(Console.ReadLine());
+            double insulinD = 32;
+            //Console.WriteLine("enter BMI ");
+            //double BMId = double.Parse(Console.ReadLine());
+            double BMId = 53.3;
+            //Console.WriteLine(" enter DiabetesPedigreeFunction ");
+            //double DiabetesPedigreeFunctionD = double.Parse(Console.ReadLine());
+            double DiabetesPedigreeFunctionD = 0.532;
+            //Console.WriteLine("enter the age ");
+            //double ageD = double.Parse(Console.ReadLine());
+            double ageD = 55;
+
+
+
+
+
+
+            for (int a = 1; a < 768; a++)
+            {
+               value.Add( Math.Sqrt(Math.Pow( Pregnancies[a]-PregnanciesD,2)+ Math.Pow(Glucose[a] - glucoseD, 2)+ Math.Pow(BloodPressure[a] - BloodPressureD, 2)+ Math.Pow(SkinThickness[a] - SkinThicknessD, 2)+ Math.Pow(Insulin[a] - insulinD, 2)+ Math.Pow(BMI[a] - BMId, 2)+ Math.Pow(DiabetesPedigreeFunction[a] - DiabetesPedigreeFunctionD, 2)));
+
+            }
+            //Console.WriteLine("values");
+            //Console.WriteLine(value[0]);
+            //Console.WriteLine(value[1]);
+            //Console.WriteLine(value[2]);
+            //Console.WriteLine(value[3]);
+
+            //Console.WriteLine("outcomes ");
+
+            //Console.WriteLine(Outcome[0]);
+            //Console.WriteLine(Outcome[1]);
+            //Console.WriteLine(Outcome[2]);
+            //Console.WriteLine(Outcome[3]);
+
+            //Console.WriteLine("==========");
+
+            double t  = 0;
+            double tt = 0;
+            //here we will sort the value list
+            // and evere time we swap the value of value list we swap the value of 
+            // outcome list so we keep traking of each element in value and which class 
+            // it belongs to 1 or 0 
+            for (int i = 0; i < value.Count - 1; i++)
+            {
+
+                int min = i;
+                for (int f = i + 1; f < value.Count - 1; f++)
+                {
+                    if (value [f] < value [min])
+                        min = f;
+                }
+               // swap(ref Outcome[i],ref Outcome [min]);
+                t= Outcome[i];
+                Outcome[i] = Outcome[min];
+                Outcome[min] = t;
+
+                tt = value[i];
+                value[i] = value[min];
+                value[min] = tt;
+               // swap (ref value[i],ref value [min]);
+            }
+
+            //Console.WriteLine("values");
+
+            //Console.WriteLine(value[0]);
+            //Console.WriteLine(value[1]);
+            //Console.WriteLine(value[2]);
+            //Console.WriteLine(value[3]);
+
+
+
+
+            //Console.WriteLine("outcomes ");
+            int zero = 0;
+            int one = 0;
+          for(int i = 0; i < 27; i++)
+            {
+                if (Outcome[i] == 0)
+                    zero++;
+                else
+                    one++;
+               
+               // Console.WriteLine(Outcome[i]);
+            }
+            Console.WriteLine(zero);
+            Console.WriteLine(one);
+            if(zero>one)
+                Console.WriteLine("belongs to class zero ");
+            else
+                Console.WriteLine("it belongs to class one");
+
+        }
+    }
+}
